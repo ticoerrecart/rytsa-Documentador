@@ -1,5 +1,7 @@
 package rytsa.documentador;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -30,7 +32,7 @@ import com.sun.source.util.Trees;
 public class Analizador extends AbstractProcessor {
 
     private Trees trees;
-
+    public List<ClaseBean> beans = new ArrayList<ClaseBean>();
     @Override
     public void init(ProcessingEnvironment pe) {
         super.init(pe);
@@ -53,19 +55,12 @@ public class Analizador extends AbstractProcessor {
             RoundEnvironment roundEnvironment) {
 
         // Scanner class to scan through various component elements
-        CodeAnalyzerTreeVisitor visitor = new CodeAnalyzerTreeVisitor();
-
+        AnalizadorTreeVisitor visitor = new AnalizadorTreeVisitor();
         for (Element e : roundEnvironment.getRootElements()) {
             TreePath tp = trees.getPath(e);
             // invoke the scanner
             visitor.scan(tp, trees);
-            TypeElement typeElement = (TypeElement) e;
-                        
-            JavaClassInfo clazzInfo = visitor.getClassInfo();
-            
-            //LocationInfoSetter.setLocationInfoForElements(clazzInfo);
-           // ClassModelMap.getInstance().addClassInfo(className, clazzInfo);
-           // CodeAnalyzer.getInstance().process(className);
+            beans.add(visitor.bean);
         }
 
         return true;

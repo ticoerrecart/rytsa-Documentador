@@ -170,6 +170,7 @@ public class Frame extends javax.swing.JFrame {
 		
 		documentador.setProyecto(jTextField2.getText());
 		documentador.setSeparador(jTextField3.getText());
+		documentador.setFileOrDirectory(new File(jTextField1.getText()));
 		documentador.documentar();
 	}
 
@@ -179,12 +180,11 @@ public class Frame extends javax.swing.JFrame {
 		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		//fc.setFileFilter(new PropertyFileFilter());
 		int returnVal = fc.showOpenDialog(this);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		//if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
-			documentador.setFileOrDirectory(file);
 			jTextField1.setText(file.getAbsolutePath());
 			
-		}
+		//}
 	}
 
 	/**
