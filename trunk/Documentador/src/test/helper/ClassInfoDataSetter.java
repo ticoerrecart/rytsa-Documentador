@@ -3,6 +3,7 @@ package test.helper;
 import java.util.List;
 
 import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
@@ -35,7 +36,7 @@ public class ClassInfoDataSetter {
      */
     public static void populateClassInfo(JavaClassInfo clazzInfo,
             ClassTree classTree, TreePath path, Trees trees) {
-
+    	
         TypeElement e = (TypeElement) trees.getElement(path);
 
         //Set qualified class name
