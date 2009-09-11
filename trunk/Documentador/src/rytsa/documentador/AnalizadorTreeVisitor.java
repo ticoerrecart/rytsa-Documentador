@@ -1,12 +1,6 @@
 package rytsa.documentador;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-
-import test.helper.ClassInfoDataSetter;
-import test.helper.FieldInfoDataSetter;
-import test.helper.MethodInfoDataSetter;
-import test.model.JavaClassInfo;
 
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.MethodTree;
@@ -47,7 +41,7 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
             bean.setPaquete(e.getEnclosingElement().toString());
             bean.setTipo(e.getKind().toString());
             bean.setSubtipo(e.getModifiers().toString());
-            bean.setDescripcion("?");	
+            bean.setDescripcion("");	
         }
         
         return super.visitClass(classTree, trees);

@@ -13,9 +13,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
-import test.CodeAnalyzerTreeVisitor;
-import test.model.JavaClassInfo;
-
 import com.sun.source.util.TreePath;
 import com.sun.source.util.Trees;
 
