@@ -65,7 +65,31 @@ public class Documentador {
 		recuperarFiles(fileOrDirectory,files);
 
 		
+//		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		
+		// Try finding a compiler.
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		if (compiler == null) {
+			// Normal JDK compiler not found, try finding one in classpath
+			final ClassLoader loader = Documentador.class.getClassLoader();
+			Class<JavaCompiler> cls;
+			try {
+				cls = (Class<JavaCompiler>) loader.loadClass("com.sun.tools.javac.api.JavacTool");
+				compiler = cls.asSubclass(JavaCompiler.class).newInstance();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+
+		
 		StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
 		File filesArray[] = new File[]{}; 
 		filesArray = files.toArray(filesArray);
