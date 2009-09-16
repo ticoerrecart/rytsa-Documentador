@@ -1,6 +1,12 @@
 package rytsa.documentador;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+
+import test.helper.ClassInfoDataSetter;
+import test.helper.FieldInfoDataSetter;
+import test.helper.MethodInfoDataSetter;
+import test.model.JavaClassInfo;
 
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.MethodTree;
@@ -8,6 +14,7 @@ import com.sun.source.tree.VariableTree;
 import com.sun.source.util.TreePath;
 import com.sun.source.util.TreePathScanner;
 import com.sun.source.util.Trees;
+import com.sun.tools.javac.tree.JCTree.JCIdent;
 
 /**
  * Visitor class which visits different nodes of the input source file, 
@@ -41,7 +48,7 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
             bean.setPaquete(e.getEnclosingElement().toString());
             bean.setTipo(e.getKind().toString());
             bean.setSubtipo(e.getModifiers().toString());
-            bean.setDescripcion("");	
+            bean.setDescripcion("?"); //TODO -> podria ser main si tiene un metodo main	
         }
         
         return super.visitClass(classTree, trees);
@@ -72,10 +79,30 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
     public Object visitVariable(VariableTree variableTree, Trees trees) {
        /* TreePath path = getCurrentPath();
         Element e = trees.getElement(path);
-
+	
         //populate required method information to model
         FieldInfoDataSetter.populateFieldInfo(clazzInfo, variableTree, e, 
                                               path, trees);*/
+    	try {    	
+	    	ClaseBean cb = new ClaseBean();
+	    	bean.getVariables().add(cb);
+	    	
+	    	String fullName = ((JCIdent)variableTree.getType()).sym.toString();
+	    	int lastPoint = fullName.lastIndexOf('.');
+	    	
+	    	cb.setNombre(fullName.substring(lastPoint+1));
+	    	cb.setNombreInstancia(variableTree.getName().toString());
+	    	cb.setPaquete(fullName.substring(0,lastPoint));
+	    	//cb.setTipo(variableTree.getModifiers().toString());
+	    	cb.setSubtipo(variableTree.getModifiers().toString());
+	    	if (variableTree.getInitializer() != null) {
+				cb.setCardinalidad("Instancia");
+			} else{
+				cb.setCardinalidad("Parameter");
+			}
+    	} catch (Exception e) {
+    		System.out.println("ERROR -> " +  e.toString());
+    	}	
         return super.visitVariable(variableTree, trees);
     }
 }
