@@ -1,12 +1,6 @@
 package rytsa.documentador;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-
-import test.helper.ClassInfoDataSetter;
-import test.helper.FieldInfoDataSetter;
-import test.helper.MethodInfoDataSetter;
-import test.model.JavaClassInfo;
 
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.MethodTree;
@@ -15,6 +9,8 @@ import com.sun.source.util.TreePath;
 import com.sun.source.util.TreePathScanner;
 import com.sun.source.util.Trees;
 import com.sun.tools.javac.tree.JCTree.JCIdent;
+import com.sun.tools.javac.tree.JCTree.JCPrimitiveTypeTree;
+import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
 
 /**
  * Visitor class which visits different nodes of the input source file, 
@@ -87,12 +83,13 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 	    	ClaseBean cb = new ClaseBean();
 	    	bean.getVariables().add(cb);
 	    	
-	    	String fullName = ((JCIdent)variableTree.getType()).sym.toString();
-	    	int lastPoint = fullName.lastIndexOf('.');
 	    	
-	    	cb.setNombre(fullName.substring(lastPoint+1));
+	    	cargarDatosVariable(variableTree,cb);
+	    	
+	    	
+	    	
 	    	cb.setNombreInstancia(variableTree.getName().toString());
-	    	cb.setPaquete(fullName.substring(0,lastPoint));
+	    	
 	    	//cb.setTipo(variableTree.getModifiers().toString());
 	    	cb.setSubtipo(variableTree.getModifiers().toString());
 	    	if (variableTree.getInitializer() != null) {
@@ -105,5 +102,46 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
     	}	
         return super.visitVariable(variableTree, trees);
     }
+    
+    
+    void  cargarDatosVariable(VariableTree variableTree, ClaseBean cb) {
+		
+		if (variableTree.getType() instanceof JCVariableDecl) {
+			cargarDatosVariable((JCVariableDecl)variableTree.getType(), cb);
+		} else if (variableTree.getType() instanceof JCPrimitiveTypeTree) {
+			cargarDatosVariable((JCPrimitiveTypeTree)variableTree.getType(), cb);
+		} else if (variableTree.getType() instanceof JCIdent) {
+			cargarDatosVariable((JCIdent)variableTree.getType(), cb);
+		} else {
+			System.out.println("ERROR -> " + variableTree.toString());	
+		}
+		
+	}
+
+    
+    void cargarDatosVariable(JCVariableDecl variableTree, ClaseBean cb){
+    	cb.setNombre(variableTree.getType().toString());
+    	System.out.println("ERROR SYM NULL Dentro del vartype -> " + variableTree.toString());
+    }
+    
+    void cargarDatosVariable(JCPrimitiveTypeTree variableTree, ClaseBean cb){
+    	cb.setNombre(variableTree.toString());
+    	cb.setPaquete("<<Primitivo>>");
+    }
+    
+    void cargarDatosVariable(JCIdent variableTree, ClaseBean cb){
+    	if (variableTree.sym != null){
+    		String fullName = variableTree.sym.toString();
+	    	int lastPoint = fullName.lastIndexOf('.');
+	    	cb.setNombre(fullName.substring(lastPoint+1));
+	    	cb.setPaquete(fullName.substring(0,lastPoint));
+    	} else {
+    		cb.setNombre(variableTree.toString());
+    		System.out.println("ERROR SYM NULL -> " + variableTree.toString());
+    	}
+    }
+    
+    
+    
 }
 

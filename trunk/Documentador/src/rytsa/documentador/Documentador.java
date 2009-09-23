@@ -18,7 +18,7 @@ public class Documentador {
 	public File fileOrDirectory;
 	public String proyecto;
 	public String separador;
-	private Analizador analizador = new Analizador();
+	private Analizador analizador;// = new Analizador();
 	
 	public String getProyecto() {
 		return proyecto;
@@ -98,10 +98,13 @@ public class Documentador {
 		CompilationTask task = compiler.getTask(null, fileManager, null, null, null, compilationUnits1);
 		// Get the list of annotation processors
 		LinkedList<AbstractProcessor> processors = new LinkedList<AbstractProcessor>();
+		analizador = new Analizador();
 		processors.add(analizador);
 		task.setProcessors(processors);
 		// 	Perform the compilation task.
+		
 		task.call();
+		
 		
 		try {
 			Exportador.exportar(this.getSeparador(),this.getProyecto(),this.fileOrDirectory.getName(),this.analizador.beans);
