@@ -7,6 +7,7 @@
 package rytsa.documentador;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
 
@@ -171,7 +172,13 @@ public class Frame extends javax.swing.JFrame {
 		documentador.setProyecto(jTextField2.getText());
 		documentador.setSeparador(jTextField3.getText());
 		documentador.setFileOrDirectory(new File(jTextField1.getText()));
-		documentador.documentar();
+		
+		try {
+			documentador.documentar();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
