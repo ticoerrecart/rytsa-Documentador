@@ -3,6 +3,7 @@ package rytsa.documentador;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,10 +12,10 @@ import java.util.zip.ZipFile;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.tools.JavaCompiler;
+import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
-import javax.tools.JavaCompiler.CompilationTask;
 
 public class Documentador {
 	public File fileOrDirectory;
@@ -132,8 +133,10 @@ public class Documentador {
 		Iterable<? extends JavaFileObject> compilationUnits1 = fileManager
 				.getJavaFileObjects(filesArray);
 
-		CompilationTask task = compiler.getTask(null, fileManager, null, null,
-				null, compilationUnits1);
+		//CompilationTask task = compiler.getTask(null, fileManager, null, null,null, compilationUnits1);
+		String[] options =  {"-Xmaxerrs","500"};
+		CompilationTask task = compiler.getTask(null, fileManager, null , Arrays.asList(options) , null, compilationUnits1);
+	
 		// Get the list of annotation processors
 		LinkedList<AbstractProcessor> processors = new LinkedList<AbstractProcessor>();
 		analizador = new Analizador();
