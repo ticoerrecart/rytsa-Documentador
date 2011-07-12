@@ -13,9 +13,21 @@ public class ClaseBean {
 	private String descripcion; 
 	private String cardinalidad;
 	private List<ClaseBean> variables = new ArrayList<ClaseBean>();
+	private List<ClaseBean> referencias = new ArrayList<ClaseBean>();
+	private List<ClaseBean> metodos = new ArrayList<ClaseBean>();
 	
-
-	
+	public List<ClaseBean> getMetodos() {
+		return metodos;
+	}
+	public void setMetodos(List<ClaseBean> metodos) {
+		this.metodos = metodos;
+	}
+	public List<ClaseBean> getReferencias() {
+		return referencias;
+	}
+	public void setReferencias(List<ClaseBean> referencias) {
+		this.referencias = referencias;
+	}
 	public String getTipo() {
 		return tipo;
 	}
