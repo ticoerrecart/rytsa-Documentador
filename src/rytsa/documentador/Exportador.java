@@ -47,6 +47,27 @@ public class Exportador {
 					.append("\n");	
 				}
 			}
+
+
+			for (ClaseBean claseEstatica : bean.getClasesEstaticas()) {
+				//si variable.getNombre() esta en beans.bean.getNombre().
+				
+				if (clases.contains(claseEstatica.getNombre())){
+					fw2.append(proyecto)
+					.append(separador).append(bean.getPaquete())
+					.append(separador).append(bean.getNombre())
+					.append(separador).append(bean.getTipo())
+					.append(separador).append(bean.getSubtipo())
+					.append(separador).append(bean.getPaquete()) 		
+					.append(separador).append(claseEstatica.getNombre())
+					.append(separador).append(claseEstatica.getSubtipo())
+					.append(separador).append(claseEstatica.getCardinalidad())
+					.append(separador).append(String.valueOf(i++))
+					.append("\n");	
+				}
+			}
+
+		
 		} 
 		
 		fw.append("*FIN");

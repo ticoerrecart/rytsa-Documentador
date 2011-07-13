@@ -1,17 +1,16 @@
 package rytsa.documentador;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.ImportTree;
-import com.sun.source.tree.MemberSelectTree;
+import com.sun.source.tree.MethodInvocationTree;
 import com.sun.source.tree.MethodTree;
-import com.sun.source.tree.Tree;
 import com.sun.source.tree.VariableTree;
 import com.sun.source.util.TreePath;
 import com.sun.source.util.TreePathScanner;
 import com.sun.source.util.Trees;
-import com.sun.tools.javac.parser.Keywords;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCAnnotation;
 import com.sun.tools.javac.tree.JCTree.JCAssign;
@@ -27,6 +26,7 @@ import com.sun.tools.javac.tree.JCTree.JCMethodInvocation;
 import com.sun.tools.javac.tree.JCTree.JCPrimitiveTypeTree;
 import com.sun.tools.javac.tree.JCTree.JCStatement;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
+import com.sun.tools.javac.tree.TreeInfo;
 
 /**
  * Visitor class which visits different nodes of the input source file, extracts
@@ -82,6 +82,28 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 		cargarDatosImport(importTree, cb);
 		return super.visitImport(importTree, trees);
 
+	}
+	
+
+	@Override
+	public Object visitMethodInvocation(MethodInvocationTree mi, Trees trees) {
+
+		ClaseBean cb = new ClaseBean();		
+
+//		System.out.println(" mi.toString() " + mi.toString());
+//		System.out.println(" mi.getClass() " + mi.getClass());
+//		System.out.println(" mi.getKind " + mi.getKind());
+//		System.out.println(" mi.getMethodSelect " + mi.getMethodSelect().toString());
+
+		String claseStatic =  mi.getMethodSelect().toString();
+		int point = claseStatic.indexOf('.');
+		if (point > -1) {
+			bean.getClasesEstaticas().add(cb);
+			cb.setNombre(claseStatic.substring(0, point));
+			cb.setCardinalidad("POU");
+			cb.setSubtipo("java");
+		}	
+		return super.visitMethodInvocation(mi, trees);
 	}
 
 	/**
@@ -202,8 +224,7 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 
 	void cargarDatosVariable(JCVariableDecl variableTree, ClaseBean cb) {
 		cb.setNombre(variableTree.getType().toString());
-		System.out.println("ERROR SYM NULL Dentro del vartype -> "
-				+ variableTree.toString());
+		// System.out.println("ERROR SYM NULL Dentro del vartype -> " 				+ variableTree.toString());
 	}
 
 	void cargarDatosVariable(JCPrimitiveTypeTree variableTree, ClaseBean cb) {
@@ -219,7 +240,7 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 			cb.setPaquete(fullName.substring(0, lastPoint));
 		} else {
 			cb.setNombre(variableTree.toString());
-			System.out.println("ERROR SYM NULL -> " + variableTree.toString());
+			// System.out.println("ERROR SYM NULL -> " + variableTree.toString());
 		}
 	}
 
