@@ -15,7 +15,14 @@ public class ClaseBean {
 	private List<ClaseBean> variables = new ArrayList<ClaseBean>();
 	private List<ClaseBean> referencias = new ArrayList<ClaseBean>();
 	private List<ClaseBean> metodos = new ArrayList<ClaseBean>();
+	private List<ClaseBean> clasesEstaticas = new ArrayList<ClaseBean>();
 	
+	public List<ClaseBean> getClasesEstaticas() {
+		return clasesEstaticas;
+	}
+	public void setClasesEstaticas(List<ClaseBean> clasesEstaticas) {
+		this.clasesEstaticas = clasesEstaticas;
+	}
 	public List<ClaseBean> getMetodos() {
 		return metodos;
 	}
