@@ -1,6 +1,7 @@
 package rytsa.documentador;
 
-import javax.lang.model.element.Element;
+import java.util.List;
+
 import javax.lang.model.element.TypeElement;
 
 import com.sun.source.tree.ClassTree;
@@ -26,7 +27,6 @@ import com.sun.tools.javac.tree.JCTree.JCMethodInvocation;
 import com.sun.tools.javac.tree.JCTree.JCPrimitiveTypeTree;
 import com.sun.tools.javac.tree.JCTree.JCStatement;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
-import com.sun.tools.javac.tree.TreeInfo;
 
 /**
  * Visitor class which visits different nodes of the input source file, extracts
@@ -57,12 +57,12 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 			bean = new ClaseBean();
 			bean.setNombre(e.getSimpleName().toString());
 			bean.setPaquete(e.getEnclosingElement().toString());
-			bean.setTipo(e.getKind().toString());
-			bean.setSubtipo("java");
+			//bean.setTipo(e.getKind().toString());
+			//bean.setSubtipo("java");
 		}
 
 		return super.visitClass(classTree, trees);
-		
+
 	}
 
 	/**
@@ -83,26 +83,31 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 		return super.visitImport(importTree, trees);
 
 	}
-	
 
 	@Override
 	public Object visitMethodInvocation(MethodInvocationTree mi, Trees trees) {
 
-		ClaseBean cb = new ClaseBean();		
+		ClaseBean cb = new ClaseBean();
 
-//		System.out.println(" mi.toString() " + mi.toString());
-//		System.out.println(" mi.getClass() " + mi.getClass());
-//		System.out.println(" mi.getKind " + mi.getKind());
-//		System.out.println(" mi.getMethodSelect " + mi.getMethodSelect().toString());
+		// System.out.println(" mi.getClass().getPackage(); " +
+		// mi.getMethodSelect().getKind());
+		// System.out.println(" mi.getClass() " + mi.getClass());
+		// System.out.println(" mi.getKind " + mi.getKind());
+		// System.out.println(" mi.getMethodSelect " +
+		// mi.getMethodSelect().toString());
 
-		String claseStatic =  mi.getMethodSelect().toString();
+		String claseStatic = mi.getMethodSelect().toString();
+
 		int point = claseStatic.indexOf('.');
 		if (point > -1) {
-			bean.getClasesEstaticas().add(cb);
+
 			cb.setNombre(claseStatic.substring(0, point));
 			cb.setCardinalidad("POU");
-			cb.setSubtipo("java");
-		}	
+			//cb.setTipo("CLASS");
+			//cb.setSubtipo("java");
+			registroEstaticaSiNoExiste(bean.getClasesEstaticas(), cb);
+		}
+
 		return super.visitMethodInvocation(mi, trees);
 	}
 
@@ -115,22 +120,24 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 	 */
 	@Override
 	public Object visitMethod(MethodTree methodTree, Trees trees) {
-		
+
 		ClaseBean cb = new ClaseBean();
-		//	System.out.println(" clases " + methodTree.getName());
+		// System.out.println(" clases " + methodTree.getName());
 
 		bean.getMetodos().add(cb);
-	
-		//Si esta clase tiene un método main, completo la descripción con ese dato
-		if (  methodTree.getName().contentEquals("main")){
+		bean.setDescripcion("");
+
+		// Si esta clase tiene un método main, completo la descripción con ese
+		// dato
+		if (methodTree.getName().contentEquals("main")) {
 			bean.setDescripcion("main");
 		}
-		
+
 		cb.setNombre(methodTree.getClass().getSimpleName().toString());
 		cb.setPaquete(methodTree.getClass().getEnclosingClass().toString());
-		cb.setTipo(methodTree.getKind().toString());
-		cb.setSubtipo("java");
-				
+		//cb.setTipo(methodTree.getKind().toString());
+		//cb.setSubtipo("java");
+
 		return super.visitMethod(methodTree, trees);
 	}
 
@@ -152,22 +159,27 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 		 */
 		try {
 			ClaseBean cb = new ClaseBean();
-			bean.getVariables().add(cb);
+			
 
 			cargarDatosVariable(variableTree, cb);
 
 			cb.setNombreInstancia(variableTree.getName().toString());
 
-			// cb.setTipo(variableTree.getModifiers().toString());
-			cb.setSubtipo(variableTree.getModifiers().toString());
+			//cb.setTipo("CLASS");
+			//cb.setSubtipo("java");
+			
 			if (variableTree.getInitializer() != null) {
 				cb.setCardinalidad("Instancia");
 			} else {
-				cb.setCardinalidad("Parameter");
+				cb.setCardinalidad("UPD");
 			}
+		
+			registroVariableSiNoExiste(bean.getVariables(), cb);
+		
 		} catch (Exception e) {
 			System.out.println("ERROR -> " + e.toString());
 		}
+				
 		return super.visitVariable(variableTree, trees);
 	}
 
@@ -221,10 +233,10 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 
 	}
 
-
 	void cargarDatosVariable(JCVariableDecl variableTree, ClaseBean cb) {
 		cb.setNombre(variableTree.getType().toString());
-		// System.out.println("ERROR SYM NULL Dentro del vartype -> " 				+ variableTree.toString());
+		// System.out.println("ERROR SYM NULL Dentro del vartype -> " +
+		// variableTree.toString());
 	}
 
 	void cargarDatosVariable(JCPrimitiveTypeTree variableTree, ClaseBean cb) {
@@ -240,7 +252,9 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 			cb.setPaquete(fullName.substring(0, lastPoint));
 		} else {
 			cb.setNombre(variableTree.toString());
-			// System.out.println("ERROR SYM NULL -> " + variableTree.toString());
+			// System.out.println("ERROR SYM NULL -> " +
+			// variableTree.toString());
+		
 		}
 	}
 
@@ -255,9 +269,33 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 
 		cb.setNombre(importTree.getClass().getSimpleName().toString());
 		cb.setPaquete(importTree.getClass().getEnclosingClass().toString());
-		cb.setTipo(importTree.getKind().toString());
-		cb.setSubtipo("java");
+		//cb.setTipo(importTree.getKind().toString());
+		//cb.setSubtipo("java");
 
+	}
+
+	private void registroEstaticaSiNoExiste(List<ClaseBean> clasesEstaticas,
+			ClaseBean cb) {
+		boolean llamadoAClaseEstaticaExiste = false;
+		for (ClaseBean b : clasesEstaticas) {
+			if (b.getNombre().equals(cb.getNombre()))
+				llamadoAClaseEstaticaExiste = true;
+		}
+		if (!llamadoAClaseEstaticaExiste)
+			bean.getClasesEstaticas().add(cb);
+	}
+
+	private void registroVariableSiNoExiste(List<ClaseBean> variables,
+			ClaseBean cb) {
+		boolean existe = false;
+		for (ClaseBean b : variables) {
+			if (b.getNombre()!= null) {
+				if (b.getNombre().equals(cb.getNombre()))
+					existe = true;
+			}
+		}
+		if (!existe)
+			bean.getVariables().add(cb);
 	}
 
 }
