@@ -17,6 +17,13 @@ public class ClaseBean {
 	private List<ClaseBean> metodos = new ArrayList<ClaseBean>();
 	private List<ClaseBean> clasesEstaticas = new ArrayList<ClaseBean>();
 	
+
+	
+	public ClaseBean() {
+		this.setTipo("Class");
+		this.setSubtipo("Java");
+	}
+	
 	public List<ClaseBean> getClasesEstaticas() {
 		return clasesEstaticas;
 	}

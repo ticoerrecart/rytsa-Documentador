@@ -3,7 +3,6 @@ package rytsa.documentador;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Exportador {
@@ -27,6 +26,7 @@ public class Exportador {
 		FileWriter fw2 = new FileWriter("Tabla5.txt");
 		for (ClaseBean bean : beans) {
 			int i = 0;
+			
 			for (ClaseBean variable : bean.getVariables()) {
 				//si variable.getNombre() esta en beans.bean.getNombre().
 				
@@ -38,9 +38,8 @@ public class Exportador {
 					.append(separador).append(bean.getTipo())
 					.append(separador).append(bean.getSubtipo())
 					.append(separador).append(variable.getPaquete())
-					//No nos interesa documentar el nombre de la variable
-					//.append(separador).append(variable.getNombreInstancia())
 					.append(separador).append(variable.getNombre())
+					.append(separador).append(variable.getTipo())
 					.append(separador).append(variable.getSubtipo())
 					.append(separador).append(variable.getCardinalidad())
 					.append(separador).append(String.valueOf(i++))
@@ -50,24 +49,23 @@ public class Exportador {
 
 
 			for (ClaseBean claseEstatica : bean.getClasesEstaticas()) {
-				//si variable.getNombre() esta en beans.bean.getNombre().
-				
-				if (clases.contains(claseEstatica.getNombre())){
+								
+				if (clases.contains(claseEstatica.getNombre())){					
+					
 					fw2.append(proyecto)
 					.append(separador).append(bean.getPaquete())
 					.append(separador).append(bean.getNombre())
 					.append(separador).append(bean.getTipo())
 					.append(separador).append(bean.getSubtipo())
-					.append(separador).append(bean.getPaquete()) 		
+					.append(separador).append("") //todavía no tenemos el paquete  .append(separador).append(bean.getPaquete()) 		
 					.append(separador).append(claseEstatica.getNombre())
+					.append(separador).append(claseEstatica.getTipo())
 					.append(separador).append(claseEstatica.getSubtipo())
 					.append(separador).append(claseEstatica.getCardinalidad())
 					.append(separador).append(String.valueOf(i++))
 					.append("\n");	
 				}
-			}
-
-		
+			}		
 		} 
 		
 		fw.append("*FIN");
