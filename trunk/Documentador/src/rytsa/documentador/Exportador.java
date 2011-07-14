@@ -28,16 +28,14 @@ public class Exportador {
 			int i = 0;
 			
 			for (ClaseBean variable : bean.getVariables()) {
-				//si variable.getNombre() esta en beans.bean.getNombre().
 				
 				if (clases.contains(variable.getNombre())){
 					fw2.append(proyecto)
-					//.append(separador).append(residencia)
 					.append(separador).append(bean.getPaquete())
 					.append(separador).append(bean.getNombre())
 					.append(separador).append(bean.getTipo())
 					.append(separador).append(bean.getSubtipo())
-					.append(separador).append(variable.getPaquete())
+					.append(separador).append(obtenerPaquete(variable, beans))
 					.append(separador).append(variable.getNombre())
 					.append(separador).append(variable.getTipo())
 					.append(separador).append(variable.getSubtipo())
@@ -57,7 +55,7 @@ public class Exportador {
 					.append(separador).append(bean.getNombre())
 					.append(separador).append(bean.getTipo())
 					.append(separador).append(bean.getSubtipo())
-					.append(separador).append("") //todavía no tenemos el paquete  .append(separador).append(bean.getPaquete()) 		
+					.append(separador).append(obtenerPaquete(claseEstatica, beans))  		
 					.append(separador).append(claseEstatica.getNombre())
 					.append(separador).append(claseEstatica.getTipo())
 					.append(separador).append(claseEstatica.getSubtipo())
@@ -75,6 +73,21 @@ public class Exportador {
 		fw.close();
 		fw2.close();
 	}
+
+	// Tenemos algunas variables y clases estáticas que vienen con el paquete vacio.
+	// Las voy a buscar entren los beans y voy a devolver el paquete correcto.
+	private static String obtenerPaquete(ClaseBean claseBuscada, List<ClaseBean> clasesInventario){
+		String paquete = "";
+		if (claseBuscada.getPaquete() == null || claseBuscada.getPaquete().equals("")) {
+			for (ClaseBean b : clasesInventario) {
+				if (b.getNombre().equals(claseBuscada.getNombre())) {
+					paquete = b.getPaquete();
+				}
+			}
+		}
+		return paquete;
+	}
+
 
 }
 
