@@ -124,15 +124,18 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 		ClaseBean cb = new ClaseBean();
 		// System.out.println(" clases " + methodTree.getName());
 
-		bean.getMetodos().add(cb);
-		bean.setDescripcion("");
-
+		bean.getMetodos().add(cb);		
+		
 		// Si esta clase tiene un método main, completo la descripción con ese
 		// dato
-		if (methodTree.getName().contentEquals("main")) {
+		if (methodTree.getName().contentEquals("main")) {			
 			bean.setDescripcion("main");
+		}			
+		else
+		{
+			if (bean.getDescripcion() == null)
+				bean.setDescripcion("");
 		}
-
 		cb.setNombre(methodTree.getClass().getSimpleName().toString());
 		cb.setPaquete(methodTree.getClass().getEnclosingClass().toString());
 		//cb.setTipo(methodTree.getKind().toString());
