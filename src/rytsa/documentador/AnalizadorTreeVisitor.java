@@ -57,12 +57,11 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 			bean = new ClaseBean();
 			bean.setNombre(e.getSimpleName().toString());
 			bean.setPaquete(e.getEnclosingElement().toString());
-			//bean.setTipo(e.getKind().toString());
-			//bean.setSubtipo("java");
+			bean.setDescripcion("La clase es : " + e.getModifiers().toString() +". " + "Hereda de : " + e.getSuperclass().toString() + ". ");
+			bean.setCodigoFuente(path.getCompilationUnit().toString());
 		}
 
 		return super.visitClass(classTree, trees);
-
 	}
 
 	/**
@@ -81,30 +80,18 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 		bean.getReferencias().add(cb);
 		cargarDatosImport(importTree, cb);
 		return super.visitImport(importTree, trees);
-
 	}
 
 	@Override
 	public Object visitMethodInvocation(MethodInvocationTree mi, Trees trees) {
 
 		ClaseBean cb = new ClaseBean();
-
-		// System.out.println(" mi.getClass().getPackage(); " +
-		// mi.getMethodSelect().getKind());
-		// System.out.println(" mi.getClass() " + mi.getClass());
-		// System.out.println(" mi.getKind " + mi.getKind());
-		// System.out.println(" mi.getMethodSelect " +
-		// mi.getMethodSelect().toString());
-
 		String claseStatic = mi.getMethodSelect().toString();
 
 		int point = claseStatic.indexOf('.');
 		if (point > -1) {
-
 			cb.setNombre(claseStatic.substring(0, point));
 			cb.setCardinalidad("POU");
-			//cb.setTipo("CLASS");
-			//cb.setSubtipo("java");
 			registroEstaticaSiNoExiste(bean.getClasesEstaticas(), cb);
 		}
 
@@ -122,24 +109,21 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 	public Object visitMethod(MethodTree methodTree, Trees trees) {
 
 		ClaseBean cb = new ClaseBean();
-		// System.out.println(" clases " + methodTree.getName());
 
 		bean.getMetodos().add(cb);		
 		
 		// Si esta clase tiene un método main, completo la descripción con ese
 		// dato
 		if (methodTree.getName().contentEquals("main")) {			
-			bean.setDescripcion("main");
+			bean.setDescripcion(bean.getDescripcion() + "Contiene método main. ");			
 		}			
-		else
-		{
-			if (bean.getDescripcion() == null)
-				bean.setDescripcion("");
-		}
+//		else
+//		{
+//			if (bean.getDescripcion() == null)
+//				bean.setDescripcion("");
+//		}
 		cb.setNombre(methodTree.getClass().getSimpleName().toString());
 		cb.setPaquete(methodTree.getClass().getEnclosingClass().toString());
-		//cb.setTipo(methodTree.getKind().toString());
-		//cb.setSubtipo("java");
 
 		return super.visitMethod(methodTree, trees);
 	}
@@ -153,29 +137,10 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 	 */
 	@Override
 	public Object visitVariable(VariableTree variableTree, Trees trees) {
-		/*
-		 * TreePath path = getCurrentPath(); Element e = trees.getElement(path);
-		 * 
-		 * //populate required method information to model
-		 * FieldInfoDataSetter.populateFieldInfo(clazzInfo, variableTree, e,
-		 * path, trees);
-		 */
 		try {
 			ClaseBean cb = new ClaseBean();
-			
-
 			cargarDatosVariable(variableTree, cb);
-
 			cb.setNombreInstancia(variableTree.getName().toString());
-
-			//cb.setTipo("CLASS");
-			//cb.setSubtipo("java");
-			
-			if (variableTree.getInitializer() != null) {
-				cb.setCardinalidad("Instancia");
-			} else {
-				cb.setCardinalidad("UPD");
-			}
 		
 			registroVariableSiNoExiste(bean.getVariables(), cb);
 		
@@ -238,8 +203,6 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 
 	void cargarDatosVariable(JCVariableDecl variableTree, ClaseBean cb) {
 		cb.setNombre(variableTree.getType().toString());
-		// System.out.println("ERROR SYM NULL Dentro del vartype -> " +
-		// variableTree.toString());
 	}
 
 	void cargarDatosVariable(JCPrimitiveTypeTree variableTree, ClaseBean cb) {
@@ -255,9 +218,6 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 			cb.setPaquete(fullName.substring(0, lastPoint));
 		} else {
 			cb.setNombre(variableTree.toString());
-			// System.out.println("ERROR SYM NULL -> " +
-			// variableTree.toString());
-		
 		}
 	}
 
@@ -272,9 +232,6 @@ public class AnalizadorTreeVisitor extends TreePathScanner<Object, Trees> {
 
 		cb.setNombre(importTree.getClass().getSimpleName().toString());
 		cb.setPaquete(importTree.getClass().getEnclosingClass().toString());
-		//cb.setTipo(importTree.getKind().toString());
-		//cb.setSubtipo("java");
-
 	}
 
 	private void registroEstaticaSiNoExiste(List<ClaseBean> clasesEstaticas,

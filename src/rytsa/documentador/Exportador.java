@@ -8,8 +8,8 @@ import java.util.List;
 public class Exportador {
 
 	public static void exportar(String separador, String proyecto, String residencia,
-			List<ClaseBean> beans) throws IOException {
-		FileWriter fw = new FileWriter("Tabla1.txt");
+			List<ClaseBean> beans, String tabla1, String tabla5) throws IOException {
+		FileWriter fw = new FileWriter(tabla1);
 		List<String> clases = new ArrayList<String>();
 		for (ClaseBean bean : beans) {
 			fw.append(proyecto)
@@ -23,9 +23,9 @@ public class Exportador {
 			clases.add(bean.getNombre());
 		} 
 		
-		FileWriter fw2 = new FileWriter("Tabla5.txt");
+		FileWriter fw2 = new FileWriter(tabla5);
 		for (ClaseBean bean : beans) {
-			int i = 0;
+			int i = 1;
 			
 			for (ClaseBean variable : bean.getVariables()) {
 				
@@ -75,9 +75,9 @@ public class Exportador {
 	}
 
 	// Tenemos algunas variables y clases estáticas que vienen con el paquete vacio.
-	// Las voy a buscar entren los beans y voy a devolver el paquete correcto.
+	// Las voy a buscar entre los beans y voy a devolver el paquete correcto.
 	private static String obtenerPaquete(ClaseBean claseBuscada, List<ClaseBean> clasesInventario){
-		String paquete = "";
+		String paquete = claseBuscada.getPaquete();
 		if (claseBuscada.getPaquete() == null || claseBuscada.getPaquete().equals("")) {
 			for (ClaseBean b : clasesInventario) {
 				if (b.getNombre().equals(claseBuscada.getNombre())) {

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +23,24 @@ public class Documentador {
 	public String proyecto;
 	public String separador;
 	private Analizador analizador;// = new Analizador();
+	private String tabla1;
+	private String tabla5;
+	
+	public String getTabla1() {
+		return tabla1;
+	}
+
+	public void setTabla1(String tabla1) {
+		this.tabla1 = tabla1;
+	}
+
+	public Documentador() {
+		Calendar cal = Calendar.getInstance();
+		
+		tabla1 =  "OJ-" + Integer.toString(cal.get(Calendar.DATE)) + "-" + Integer.toString(cal.get(Calendar.MONTH)+1) + "-" + Integer.toString(cal.get(Calendar.YEAR)) + ".txt";
+		tabla5 =  "CR-" + Integer.toString(cal.get(Calendar.DATE)) + "-" + Integer.toString(cal.get(Calendar.MONTH)+1) + "-" + Integer.toString(cal.get(Calendar.YEAR)) + ".txt";
+	
+	}
 
 	public String getProyecto() {
 		return proyecto;
@@ -69,7 +88,7 @@ public class Documentador {
 	}
 
 	private boolean seDebeAgregarFile(File file) {
-		return file.getName().endsWith(".java");
+		return file.getName().endsWith(".java")  ;
 	}
 
 	private void recuperarFiles(File file, List<File> filesSalida)
@@ -148,7 +167,7 @@ public class Documentador {
 
 		try {
 			Exportador.exportar(this.getSeparador(), this.getProyecto(),
-					this.fileOrDirectory.getName(), this.analizador.beans);
+					this.fileOrDirectory.getName(), this.analizador.beans, this.tabla1, this.tabla5);
 			fileManager.close();
 		} catch (IOException e) {
 			System.out.println(e.getLocalizedMessage());
