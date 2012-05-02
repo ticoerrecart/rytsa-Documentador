@@ -64,6 +64,26 @@ public class Exportador {
 					.append("\n");	
 				}
 			}		
+
+			for (ClaseBean referencia : bean.getReferencias()) {
+				
+				if (clases.contains(referencia.getNombre())){					
+					
+					fw2.append(proyecto)
+					.append(separador).append(bean.getPaquete())
+					.append(separador).append(bean.getNombre())
+					.append(separador).append(bean.getTipo())
+					.append(separador).append(bean.getSubtipo())
+					.append(separador).append(obtenerPaquete(referencia, beans))  		
+					.append(separador).append(referencia.getNombre())
+					.append(separador).append(referencia.getTipo())
+					.append(separador).append(referencia.getSubtipo())
+					.append(separador).append(referencia.getCardinalidad())
+					.append(separador).append(String.valueOf(i++))
+					.append("\n");	
+				}
+			}		
+
 		} 
 		
 		fw.append("*FIN");
