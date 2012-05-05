@@ -22,6 +22,7 @@ public class ClaseBean {
 		this.setTipo("Class");
 		this.setSubtipo("Java");
 		this.setCardinalidad("POU");
+		this.setCodigoFuente("");
 	}
 
 	public List<ClaseBean> getClasesEstaticas() {
