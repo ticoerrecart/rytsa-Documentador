@@ -6,10 +6,20 @@
 
 package rytsa.documentador;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 
 
 
@@ -32,33 +42,77 @@ public class Frame extends javax.swing.JFrame {
 	//GEN-BEGIN:initComponents
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents() {
+	    
+		//Date hoy = new Date();
+		//SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		this.setTitle("DOCUMENTADOR DE APLICACIONES JAVA");
+		Font fuenteLabel = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
+		Font fuente1 = new Font("Arial", Font.BOLD, 12);
+		Font fuente2 = new Font("Verdana", Font.PLAIN, 12);
+		
+		try {
+			LookAndFeel laf = UIManager.getLookAndFeel();
+			//System.out.println("laf "+laf.getName());			
+			//com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		SwingUtilities.updateComponentTreeUI( this );		
 
 		jButton1 = new javax.swing.JButton();
 		jTextField1 = new javax.swing.JTextField();
 		jTextField2 = new javax.swing.JTextField();
 		jTextField3 = new javax.swing.JTextField();
+		jTextField4 = new javax.swing.JTextField();				
+		jTextField5 = new javax.swing.JTextField();
+		
 		jLabel1 = new javax.swing.JLabel();
 		jLabel2 = new javax.swing.JLabel();
 		jLabel3 = new javax.swing.JLabel();
+		jLabel4 = new javax.swing.JLabel();
+		jLabel5 = new javax.swing.JLabel();
 		jButton2 = new javax.swing.JButton();
 		documentador = new Documentador();
-			
-		setDefaultCloseOperation(3);
+		jTextField4.setText(documentador.getTabla1());
+		jTextField5.setText(documentador.getTabla5());
 
 		jButton1.setText("Seleccionar");
+		jButton1.setFont(fuente1);
 		jButton1.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jButton1ActionPerformed(evt);
 			}
 		});
-
-		jLabel1.setText("Proyecto");
-
+		
+		jLabel1.setText("Nombre Proyecto");		
+		jLabel1.setFont(fuenteLabel);		
+		
 		jLabel2.setText("Archivo/Carpeta");
-
+		jLabel2.setFont(fuenteLabel);
+		
 		jLabel3.setText("Separador");
-
+		jLabel3.setFont(fuenteLabel);
+		
+		jLabel4.setText("Nombre Archivo 1");
+		jLabel4.setFont(fuenteLabel);
+		
+		jLabel5.setText("Nombre Archivo 5");
+		jLabel5.setFont(fuenteLabel);
+		
 		jButton2.setText("Documentar");
+		jButton2.setFont(fuente1);		
 		jButton2.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jButton2ActionPerformed(evt);
@@ -67,6 +121,7 @@ public class Frame extends javax.swing.JFrame {
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
 				getContentPane());
+		//layout.setLayoutStyle(new LayoutStyle());
 		getContentPane().setLayout(layout);
 		layout
 				.setHorizontalGroup(layout
@@ -82,7 +137,9 @@ public class Frame extends javax.swing.JFrame {
 																javax.swing.GroupLayout.Alignment.TRAILING)
 														.addComponent(jLabel1)
 														.addComponent(jLabel2)
-														.addComponent(jLabel3))
+														.addComponent(jLabel3)
+														.addComponent(jLabel4)
+														.addComponent(jLabel5))
 										.addPreferredGap(
 												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 										.addGroup(
@@ -98,6 +155,12 @@ public class Frame extends javax.swing.JFrame {
 																						.createParallelGroup(
 																								javax.swing.GroupLayout.Alignment.TRAILING,
 																								false)
+																						.addComponent(
+																								jTextField5,
+																								javax.swing.GroupLayout.Alignment.LEADING)		
+																						.addComponent(
+																								jTextField4,
+																								javax.swing.GroupLayout.Alignment.LEADING)
 																						.addComponent(
 																								jTextField3,
 																								javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,25 +223,89 @@ public class Frame extends javax.swing.JFrame {
 																javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addPreferredGap(
 												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addGroup(
+												layout
+														.createParallelGroup(
+																javax.swing.GroupLayout.Alignment.BASELINE)
+														.addComponent(jLabel4)
+														.addComponent(
+																jTextField4,
+																javax.swing.GroupLayout.PREFERRED_SIZE,
+																javax.swing.GroupLayout.DEFAULT_SIZE,
+																javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addPreferredGap(
+												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addGroup(
+												layout
+														.createParallelGroup(
+																javax.swing.GroupLayout.Alignment.BASELINE)
+														.addComponent(jLabel5)
+														.addComponent(
+																jTextField5,
+																javax.swing.GroupLayout.PREFERRED_SIZE,
+																javax.swing.GroupLayout.DEFAULT_SIZE,
+																javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addPreferredGap(
+												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addContainerGap(20, Short.MAX_VALUE)		
 										.addComponent(jButton2)
-										.addContainerGap(23, Short.MAX_VALUE)));
+										.addContainerGap(25, Short.MAX_VALUE)));
 
 		pack();
 	}// </editor-fold>
 	//GEN-END:initComponents
 
 	private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-		
+		System.out.println(jTextField2.getText());
+		System.out.println(jTextField3.getText());
+		System.out.println(jTextField1.getText());
 		documentador.setProyecto(jTextField2.getText());
 		documentador.setSeparador(jTextField3.getText());
 		documentador.setFileOrDirectory(new File(jTextField1.getText()));
-		
+		documentador.setTabla1(jTextField4.getText());
+		documentador.setTabla5(jTextField5.getText());
+		if (jTextField2.getText().equalsIgnoreCase(""))
+		{
+			JOptionPane.showMessageDialog(this, "Debe ingresar el Nombre del Proyecto");
+			jTextField2.setFocusable(true);
+			jTextField2.requestFocus(); 		
+			return;
+		}
+		if (jTextField1.getText().equalsIgnoreCase(""))
+		{
+			JOptionPane.showMessageDialog(this, "Debe ingresar el Archivo o Carpeta");
+			jTextField1.setFocusable(true);
+			jTextField1.requestFocus(); 		
+			return;
+		}
+		if (jTextField3.getText().equalsIgnoreCase(""))
+		{
+			JOptionPane.showMessageDialog(this, "Debe ingresar el Caracter Separador");
+			jTextField3.setFocusable(true);
+			jTextField3.requestFocus(); 		
+			return;
+		}
+		if (jTextField4.getText().equalsIgnoreCase(""))
+		{
+			JOptionPane.showMessageDialog(this, "Debe ingresar el Nombre Archivo 1");
+			jTextField4.setFocusable(true);
+			jTextField4.requestFocus(); 		
+			return;
+		}
+		if (jTextField5.getText().equalsIgnoreCase(""))
+		{
+			JOptionPane.showMessageDialog(this, "Debe ingresar el Nombre Archivo 5");
+			jTextField5.setFocusable(true);
+			jTextField5.requestFocus(); 		
+			return;
+		}
 		try {
 			documentador.documentar();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -212,9 +339,13 @@ public class Frame extends javax.swing.JFrame {
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
+	private javax.swing.JLabel jLabel4;
+	private javax.swing.JLabel jLabel5;
 	private javax.swing.JTextField jTextField1;
 	private javax.swing.JTextField jTextField2;
 	private javax.swing.JTextField jTextField3;
+	private javax.swing.JTextField jTextField4;	
+	private javax.swing.JTextField jTextField5;
 	// End of variables declaration//GEN-END:variables
 	private Documentador documentador;
 }
