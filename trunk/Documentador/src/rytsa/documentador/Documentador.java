@@ -49,7 +49,14 @@ public class Documentador {
 	public void setTabla1(String tabla1) {
 		this.tabla1 = tabla1;
 	}
-
+	
+	public String getTabla5() {
+		return tabla5;
+	}
+	
+	public void setTabla5(String tabla5) {
+		this.tabla5 = tabla5;
+	}
 	public Documentador() {
 		Calendar cal = Calendar.getInstance();
 
